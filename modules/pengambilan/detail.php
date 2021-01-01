@@ -46,10 +46,11 @@
                         <th>No</th>
                         <th>Nama Bahan Baku</th>
                         <th>Jumlah</th>
+                        <th>Keterangan</th>
                     </thead>
                     <?php
                     $no1     = 1;
-                    $query1  = mysqli_query($db, "SELECT pengambilan.kd_pengambilan,bahan_baku.nm_bk,det_pengambilan.jumlah FROM pengambilan JOIN det_pengambilan ON det_pengambilan.kd_pengambilan=pengambilan.kd_pengambilan JOIN bahan_baku ON det_pengambilan.kd_bk=bahan_baku.kd_bk WHERE pengambilan.kd_pengambilan='$id'");
+                    $query1  = mysqli_query($db, "SELECT pengambilan.kd_pengambilan,bahan_baku.nm_bk,det_pengambilan.jumlah,det_pengambilan.keterangan FROM pengambilan JOIN det_pengambilan ON det_pengambilan.kd_pengambilan=pengambilan.kd_pengambilan JOIN bahan_baku ON det_pengambilan.kd_bk=bahan_baku.kd_bk WHERE pengambilan.kd_pengambilan='$id'");
                     $hitung1 = mysqli_num_rows($query1);
                     if ($hitung1 > 0) {
                         while ($pecah1 = mysqli_fetch_assoc($query1)) {
@@ -58,6 +59,7 @@
                                 <td><?= $no1++; ?></td>
                                 <td><?= $pecah1['nm_bk']; ?></td>
                                 <td><?= $pecah1['jumlah']; ?></td>
+                                <td><?= $pecah1['keterangan']; ?></td>
                             </tbody>
                     <?php }
                     } ?>

@@ -5,7 +5,7 @@ if (isset($_POST['cetak'])) {
     $mintgl  = $_POST['mintgl'];
     $maxtgl  = $_POST['maxtgl'];
 
-    $query  = mysqli_query($db, "SELECT * FROM penjualan WHERE DATE(tgl_jual) BETWEEN '$mintgl' AND '$maxtgl' AND tipe_jual='Catering' ORDER BY tgl_jual ASC");
+    $query  = mysqli_query($db, "SELECT * FROM penjualan JOIN pembayaran ON pembayaran.kd_penjualan=penjualan.kd_penjualan WHERE DATE(tgl_jual) BETWEEN '$mintgl' AND '$maxtgl' AND tipe_jual='Catering' AND pembayaran.status_bayar='Lunas' ORDER BY tgl_jual ASC");
 
     $hitung = mysqli_num_rows($query);
     if ($hitung > 0) {

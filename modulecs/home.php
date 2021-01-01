@@ -46,7 +46,7 @@ if (isset($_GET['aksi'])) {
                 <div class="owl-carousel popular-slider">
                     <!-- Start Single Product -->
                     <?php
-                    $query1 = mysqli_query($db, "SELECT menu.*,det_penjualan.kd_menu,det_penjualan.kd_menu FROM det_penjualan JOIN menu ON det_penjualan.kd_menu=menu.kd_menu WHERE det_penjualan.jumlah>=20 GROUP BY det_penjualan.kd_menu");
+                    $query1 = mysqli_query($db, "SELECT menu.*,det_penjualan.kd_menu,det_penjualan.kd_menu FROM det_penjualan JOIN menu ON det_penjualan.kd_menu=menu.kd_menu WHERE menu.status='Tersedia' AND det_penjualan.jumlah>=20 GROUP BY det_penjualan.kd_menu");
                     $hitung1 = mysqli_num_rows($query);
                     if ($hitung1 > 0) {
                         while ($pecah1 = mysqli_fetch_assoc($query1)) {
@@ -95,7 +95,7 @@ if (isset($_GET['aksi'])) {
         </div>
         <div class="row">
             <?php
-            $query  = mysqli_query($db, "SELECT menu.*,kategori.nm_ktgr FROM menu JOIN kategori ON menu.kd_ktgr=kategori.kd_ktgr");
+            $query  = mysqli_query($db, "SELECT menu.*,kategori.nm_ktgr FROM menu JOIN kategori ON menu.kd_ktgr=kategori.kd_ktgr WHERE menu.status='Tersedia'");
             $hitung = mysqli_num_rows($query);
             if ($hitung > 0) {
                 while ($pecah = mysqli_fetch_assoc($query)) {

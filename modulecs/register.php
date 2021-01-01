@@ -74,7 +74,10 @@ if (isset($_POST['register'])) {
                     </div>
                     <div class="form-group">
                         <label>Nama Lengkap</label>
-                        <input type="text" name="nama_plg" class="form-control" required>
+                        <?php
+                        echo "<input type='text' name='nama_plg' size='120' onkeypress='return event.charCode < 48 || event.charCode  >57'>";
+                        ?>
+                        <!-- <input type="text" name="nama_plg" class="form-control" required> -->
                     </div>
                     <div class="form-group">
                         <label>Jenis Kelamin</label><br>

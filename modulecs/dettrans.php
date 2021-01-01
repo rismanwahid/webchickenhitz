@@ -34,10 +34,10 @@
                         <?php
                         $kdjual = $_GET['kd_penjualan'];
 
-                        $query = mysqli_query($db, "SELECT penjualan.kd_penjualan,penjualan.tgl_jual,pelanggan.nm_plg,penjualan.status,penjualan.tgl_kirim,pembayaran.status_bayar,pembayaran.tipe_bayar,pembayaran.gambar_resi,penjualan.alamat_kirim FROM penjualan JOIN pelanggan ON penjualan.id_pelanggan=pelanggan.id_pelanggan JOIN pembayaran ON pembayaran.kd_penjualan=penjualan.kd_penjualan WHERE penjualan.kd_penjualan='$kdjual'");
+                        $query = mysqli_query($db, "SELECT penjualan.kd_penjualan,penjualan.tgl_jual,pelanggan.nm_plg,penjualan.status,penjualan.tgl_kirim,pembayaran.status_bayar,pembayaran.tipe_bayar,pembayaran.gambar_resi,penjualan.alamat_kirim,penjualan.tipe_ambil,penjualan.tipe_jual FROM penjualan JOIN pelanggan ON penjualan.id_pelanggan=pelanggan.id_pelanggan JOIN pembayaran ON pembayaran.kd_penjualan=penjualan.kd_penjualan WHERE penjualan.kd_penjualan='$kdjual'");
                         $hasil = mysqli_fetch_assoc($query);
 
-                        $query1  = mysqli_query($db, "SELECT penjualan.kd_penjualan,menu.nama_menu,det_penjualan.jumlah,det_penjualan.harga,SUM(det_penjualan.jumlah*det_penjualan.harga) AS sub FROM penjualan JOIN det_penjualan ON det_penjualan.kd_penjualan=penjualan.kd_penjualan JOIN menu ON det_penjualan.kd_menu=menu.kd_menu WHERE det_penjualan.kd_penjualan='$kdjual'");
+                        $query1  = mysqli_query($db, "SELECT penjualan.kd_penjualan,menu.nama_menu,det_penjualan.jumlah,det_penjualan.harga,SUM(det_penjualan.jumlah*det_penjualan.harga) AS sub FROM penjualan JOIN det_penjualan ON det_penjualan.kd_penjualan=penjualan.kd_penjualan JOIN menu ON det_penjualan.kd_menu=menu.kd_menu WHERE det_penjualan.kd_penjualan='$kdjual' GROUP BY det_penjualan.kd_menu");
                         ?>
 
                         <table>
@@ -53,17 +53,31 @@
                                 <td><?php echo date("d-m-Y H:i", strtotime($hasil['tgl_jual'])); ?></td>
                             </tr>
                             <tr>
+                                <td>Pembelian</td>
+                                <td>:</td>
+                                <td><?php echo $hasil['tipe_jual']; ?></td>
+                            </tr>
+                            <tr>
                                 <td>Status</td>
                                 <td>:</td>
                                 <td><?php echo $hasil['status']; ?></td>
                             </tr>
                             <?php
-                            if ($hasil['status'] == 'Dikirim') {
+                            if ($hasil['tipe_ambil'] == 'Dikirim') {
                             ?>
                                 <tr>
                                     <td>Tanggal Kirim</td>
                                     <td>:</td>
-                                    <td><?php echo date('d-m-Y H:i', strtotime($hasil['tgl_kirim'])) ?></td>
+                                    <td><?php if ($hasil['tgl_kirim'] == "") {
+                                            echo "-";
+                                        } else {
+                                            echo date('d-m-Y H:i', strtotime($hasil['tgl_kirim']));
+                                        } ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Alamat Pengiriman</td>
+                                    <td>:</td>
+                                    <td><?php echo $hasil['alamat_kirim']; ?></td>
                                 </tr>
                             <?php } ?>
                             <tr>
@@ -71,11 +85,25 @@
                                 <td>:</td>
                                 <td><?php echo $hasil['status_bayar']; ?></td>
                             </tr>
-                            <tr>
-                                <td>Alamat Pengiriman</td>
-                                <td>:</td>
-                                <td><?php echo $hasil['alamat_kirim']; ?></td>
-                            </tr>
+                            <?php
+                            $cekbayar = mysqli_query($db, "SELECT SUM(menu.harga*det_penjualan.jumlah+penjualan.tarif) AS total_bayar FROM det_penjualan JOIN menu ON det_penjualan.kd_menu=menu.kd_menu JOIN penjualan ON det_penjualan.kd_penjualan=penjualan.kd_penjualan WHERE det_penjualan.kd_penjualan='$kdjual'");
+                            $hasilcek = mysqli_fetch_assoc($cekbayar);
+                            $hasildp = $hasilcek['total_bayar'] / 2;
+                            if ($hasil['status_bayar'] == 'DP') {
+
+                            ?>
+                                <tr>
+                                    <td>Kekurangan</td>
+                                    <td>:</td>
+                                    <td><?= rupiah($hasildp); ?></td>
+                                </tr><?php } ?>
+                            <?php if ($hasil['tipe_ambil'] == 'Di Toko') { ?>
+                                <tr>
+                                    <td>Status Pengambilan</td>
+                                    <td>:</td>
+                                    <td><?php echo $hasil['tipe_ambil']; ?></td>
+                                </tr>
+                            <?php } ?>
                         </table><br>
 
                         <table class="table table-striped table-bordered" style="text-align:bold">
@@ -100,19 +128,31 @@
                                         <td><?php echo rupiah($pecah1['harga']); ?></td>
                                         <td><?php echo rupiah($pecah1['sub']); ?></td>
                                     </tr>
-                                    <tr>
-                                        <td colspan="3" style="text-align: center;"><b>Total</b></td>
-                                        <?php
-                                        $query2  = mysqli_query($db, "SELECT SUM(det_penjualan.jumlah*det_penjualan.harga) AS total FROM det_penjualan WHERE kd_penjualan='$kdjual'");
-
-                                        $pecah2 = mysqli_fetch_assoc($query2);
-                                        ?>
-                                        <td><b><?php echo rupiah($pecah2['total']); ?></td>
-                                    </tr>
-
-
                             <?php }
                             } ?>
+                            <?php
+                            $qr3 = mysqli_query($db, "SELECT penjualan.kd_tarif,penjualan.tarif FROM penjualan WHERE kd_penjualan='$kdjual'");
+                            $hasil3 = mysqli_fetch_assoc($qr3);
+                            if (isset($hasil3['tarif'])) {
+
+                            ?>
+                                <tr>
+                                    <td colspan="3" style="text-align: center;"><b>Ongkir</b></td>
+                                    <td><b><?php echo rupiah($hasil3['tarif']); ?></td>
+                                </tr>
+                            <?php } ?>
+                            <tr>
+                                <td colspan="3" style="text-align: center;"><b>Total</b></td>
+                                <?php
+                                $query2  = mysqli_query($db, "SELECT SUM(det_penjualan.jumlah*det_penjualan.harga)+penjualan.tarif AS total FROM det_penjualan JOIN penjualan ON det_penjualan.kd_penjualan=penjualan.kd_penjualan WHERE det_penjualan.kd_penjualan='$kdjual'");
+
+                                $pecah2 = mysqli_fetch_assoc($query2);
+                                ?>
+                                <td><b><?php echo rupiah($pecah2['total']); ?></td>
+                            </tr>
+
+
+
                         </table>
 
                     </div>

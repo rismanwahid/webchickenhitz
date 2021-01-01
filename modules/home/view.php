@@ -42,7 +42,7 @@ if (isset($_GET['aksi'])) {
 
         $mintgl = $_GET['mintgl'];
         $maxtgl = $_GET['maxtgl'];
-        $query  = mysqli_query($db, "SELECT * FROM penjualan WHERE DATE(tgl_jual) BETWEEN '$mintgl' AND '$maxtgl' AND tipe_jual='Biasa' ORDER BY tgl_jual ASC");
+        $query  = mysqli_query($db, "SELECT * FROM penjualan WHERE DATE(tgl_jual) BETWEEN '$mintgl' AND '$maxtgl' AND tipe_jual='Biasa' AND status!='Dibatalkan' ORDER BY tgl_jual ASC");
 
         $hitung = mysqli_num_rows($query);
         if ($hitung > 0) {
@@ -61,7 +61,7 @@ if (isset($_GET['aksi'])) {
 
         $mintgl = $_GET['mintgl'];
         $maxtgl = $_GET['maxtgl'];
-        $query  = mysqli_query($db, "SELECT * FROM penjualan WHERE DATE(tgl_jual) BETWEEN '$mintgl' AND '$maxtgl' AND tipe_jual='Catering' ORDER BY tgl_jual ASC");
+        $query  = mysqli_query($db, "SELECT * FROM penjualan JOIN pembayaran ON pembayaran.kd_penjualan=penjuala.kd_penjualan WHERE DATE(tgl_jual) BETWEEN '$mintgl' AND '$maxtgl' AND tipe_jual='Catering' AND pembayaran.status_bayar='Lunas' ORDER BY tgl_jual ASC");
 
         $hitung = mysqli_num_rows($query);
         if ($hitung > 0) {
@@ -120,22 +120,6 @@ if (isset($_GET['aksi'])) {
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
-                <div class="card bg-success text-white mb-4">
-                    <div class="card-body">
-                        <?php
-                        $qr2 = mysqli_query($db, "SELECT COUNT(kd_pengambilan) AS totalambil FROM pengambilan WHERE DATE(tgl_pengambilan)='$date'");
-                        $ouput2 = mysqli_fetch_assoc($qr2);
-                        ?>
-                        <h4><?= $ouput2['totalambil']; ?></h4>
-                        <p>Pengambilan <?php echo date('d-m-Y'); ?></p>
-                    </div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="admin.php?page=pengambilan">Selengkapnya</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
                 <div class="card bg-danger text-white mb-4">
                     <div class="card-body">
                         <?php
@@ -147,6 +131,22 @@ if (isset($_GET['aksi'])) {
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         <a class="small text-white stretched-link" href="admin.php?page=pengadaan">Selengkapnya</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">
+                        <?php
+                        $qr2 = mysqli_query($db, "SELECT COUNT(kd_menu) AS totalmenu FROM menu");
+                        $ouput2 = mysqli_fetch_assoc($qr2);
+                        ?>
+                        <h4><?= $ouput2['totalmenu']; ?></h4>
+                        <p>Menu</p>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="admin.php?page=menu">Selengkapnya</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -176,17 +176,6 @@ if (isset($_GET['aksi'])) {
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-success text-white mb-4">
                     <div class="card-body">
-                        <h4>Laporan Pengambilan</h4>
-                    </div>
-                    <div class="card-footer d-flex align-items-center justify-content-between">
-                        <a class="small text-white stretched-link" href="admin.php?page=home&aksi=vpengambilan&mintgl=<?php echo date('Y-m-d'); ?>&maxtgl=<?php echo date('Y-m-d'); ?>">Lihat Laporan Pengambilan Bahan</a>
-                        <div class=" small text-white"><i class="fas fa-angle-right"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6">
-                <div class="card bg-success text-white mb-4">
-                    <div class="card-body">
                         <h4>Laporan <br> Penjualan</h4>
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
@@ -202,6 +191,17 @@ if (isset($_GET['aksi'])) {
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
                         <a class="small text-white stretched-link" href="admin.php?page=home&aksi=vcat&mintgl=<?php echo date('Y-m-d'); ?>&maxtgl=<?php echo date('Y-m-d'); ?>">Lihat Laporan Catering</a>
+                        <div class=" small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4">
+                    <div class="card-body">
+                        <h4>Laporan <br> Keuntungan</h4>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small text-white stretched-link" href="admin.php?page=ceklapuntung">Lihat Laporan Keuntungan</a>
                         <div class=" small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>

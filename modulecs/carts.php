@@ -54,7 +54,7 @@ if (isset($_GET['aksi'])) {
                                     <td class="qty" data-title="Qty">
                                         <!-- Input Order -->
                                         <div class="input-group">
-                                            <input type="number" class="input-number update-qty" name="<?php echo $kd_menu ?>" data-min="1" value="<?= $qty; ?>">
+                                            <input type="number" class="update-qty" name="<?php echo $kd_menu ?>" min="1" value="<?= $qty; ?>" style="width: 50px; margin-left: 70px;">
                                         </div>
             </div>
             <!--/ End Input Order -->

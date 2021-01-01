@@ -2,7 +2,8 @@
 include '../../db.php';
 $suplier = $_POST['suplier'];
 
-echo "<option value=''>Pilih Bahan Baku</option>";
+echo "<option value=''>Pilih Bahan Baku</option>
+<option value='Tambah Bahan Baku'>Tambah Bahan Baku</option>";
 
 $query = "SELECT bahan_baku.kd_bk,bahan_baku.nm_bk,bahan_baku.kd_suply FROM bahan_baku WHERE kd_suply='$suplier' ORDER BY nm_bk ASC";
 $dewan1 = $db->prepare($query);

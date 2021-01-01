@@ -23,7 +23,7 @@ if (isset($_GET['aksi'])) {
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <a class="btn btn-primary btn-md " href="admin.php?page=tamb_baku">Tambah Bahan Baku</a><br><br>
+                <!-- <a class="btn btn-primary btn-md " href="admin.php?page=tamb_baku">Tambah Bahan Baku</a><br><br> -->
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -44,7 +44,16 @@ if (isset($_GET['aksi'])) {
                                 <tr>
                                     <td style="width: 200px;"><?= $pecah['nm_bk']; ?></td>
                                     <td style="width: 200px;"><?= $pecah['kd_suply']; ?></td>
-                                    <td style="width:150px"><?= $pecah['stok']; ?></td>
+                                    <td style="width:150px">
+                                        <?php
+                                        if ($pecah['stok'] < 1) {
+                                            echo "Habis";
+                                        } else {
+                                            echo $pecah['stok']
+                                                . " " . $pecah['satuan'];
+                                        }
+                                        ?>
+                                    </td>
                                     <td style="width:150px">
                                         <a class="btn btn-info btn-sm " href="admin.php?page=edit_baku&kd_bk=<?php echo $pecah['kd_bk']; ?>">Edit</a>
                                         <a onclick="return confirm('Anda Yakin Ingin Menghapus?')" class="btn btn-danger btn-sm" href="admin.php?page=bahanbku&aksi=hapus&kd_bk=<?php echo $pecah['kd_bk']; ?>">Hapus</a>

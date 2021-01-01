@@ -4,7 +4,19 @@
         <div class="row">
             <div class="col-lg-12 col-12">
                 <div class="alert alert-warning" role="alert">
-                    <strong>Transaksi Pembayaran Harus Dibayar MAX 12 Jam Setelah Melakukan Pemesanan.</strong><br>
+                    <?php
+                    if ($_SESSION['ss_total'] == '') {
+                        $total = rupiah($_SESSION['ss_totalnon']);
+                        $dp = $_SESSION['ss_totalnon'];
+                        $bagi = $dp / 2;
+                    } else {
+                        $total = rupiah($_SESSION['ss_total']);
+                        $dp = $_SESSION['ss_total'];
+                        $bagi = $dp / 2;
+                    }
+                    ?>
+                    <strong>Total Yang Harus Dibayar : <?= $total; ?></strong><br>
+                    <strong>Transaksi Pembayaran Bisa Dibayar DP 50% Senilai <?= rupiah($bagi); ?> MAX 12 Jam Setelah Melakukan Pemesanan.</strong><br>
                     Jika Tidak Maka Transaksi Akan Dibatalkan Oleh Admin.<br>
                     Silahkan Melakukan Transfer Ke Salah Satu Tujuan Dibawah ini:
                     <table>
@@ -31,7 +43,6 @@
                         </tr>
                         </tr>
                     </table>
-                    <strong>Dengan Total:<?= rupiah($_SESSION['ss_total']); ?></strong><br>
                 </div>
                 <div class="button">
                     <a href="index.php?page=riwayat_trans" class="btn">

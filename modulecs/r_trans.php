@@ -33,11 +33,11 @@
                                         <td style="width:250px"><?= $pecah['status_bayar']; ?></td>
                                         <td style="width:200px"><?= $pecah['status']; ?></td>
                                         <td style="width:150px">
-                                            <a class="btn " href="index.php?page=det_trans&kd_penjualan=<?php echo $pecah['kd_penjualan']; ?>">Detail</a>
-                                            <?php if ($pecah['status_bayar'] == 'Belum Melakukan Transfer') {
+                                            <a href="index.php?page=det_trans&kd_penjualan=<?php echo $pecah['kd_penjualan']; ?>" class="btn" style="color: aliceblue;">Detail</a>
+                                            <?php if ($pecah['status_bayar'] != 'Telah Melakukan Transfer' & $pecah['tipe_jual'] == 'Biasa' & $pecah['tipe_bayar'] == 'Transfer') {
                                                 echo "<a class='btn' href='index.php?page=upload_resi&kd_jual=$pecah[kd_penjualan]'><span style='color: aliceblue;'>Upload Resi</span></a>";
-                                            } else {
-                                                echo "";
+                                            } elseif ($pecah['status_bayar'] != 'Lunas' & $pecah['tipe_jual'] == 'Catering') {
+                                                echo "<a class='btn' href='index.php?page=upload_resi&kd_jual=$pecah[kd_penjualan]'><span style='color: aliceblue;'>Upload Resi</span></a>";
                                             } ?>
                                         </td>
                                     </tr>

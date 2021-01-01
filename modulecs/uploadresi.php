@@ -5,7 +5,7 @@ if (isset($_POST['uploadresi'])) {
     $gambar_new    = date('dmYHis') . $gambar_resi;
     move_uploaded_file($_FILES['resi']['tmp_name'], "img/resi_pembayaran/" . $gambar_new);
 
-    mysqli_query($db, "UPDATE pembayaran SET gambar_resi= '$gambar_new',status_bayar='Telah Melakukan Transfer' WHERE kd_penjualan='$kd_jual'");
+    mysqli_query($db, "UPDATE pembayaran SET status_bayar='Telah Melakukan Transfer',gambar_resi='$gambar_new' WHERE kd_penjualan='$kd_jual'");
 
     echo "<script>alert('Bukti Pembayaran Berhasil Di Upload')</script>";
     echo "<script>window.location='index.php?page=riwayat_trans'</script>";

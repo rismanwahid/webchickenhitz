@@ -36,7 +36,7 @@ $hasilnama = mysqli_fetch_array($nama);
         </div>
         <div class="row">
             <?php
-            $query  = mysqli_query($db, "SELECT menu.*,kategori.* FROM menu JOIN kategori ON menu.kd_ktgr=kategori.kd_ktgr WHERE kategori.kd_ktgr='$kd'");
+            $query  = mysqli_query($db, "SELECT menu.*,kategori.* FROM menu JOIN kategori ON menu.kd_ktgr=kategori.kd_ktgr WHERE kategori.kd_ktgr='$kd' AND menu.status='Tersedia'");
             $hitung = mysqli_num_rows($query);
             if ($hitung > 0) {
                 while ($pecah = mysqli_fetch_assoc($query)) {

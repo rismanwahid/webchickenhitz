@@ -49,8 +49,9 @@
                     </thead>
                     <tbody>
                         <td><?= $pecah['nm_bk']; ?></td>
-                        <td><?= $pecah['jumlah']; ?></td>
-                        <td><?= rupiah($pecah['harga']); ?></td>
+                        <td><?= $pecah['jumlah'] . " " . $pecah['satuan']; ?></td>
+                        <td><?= rupiah($pecah['harga'])
+                                . " / " . $pecah['satuan'];  ?></td>
                         <td><?= rupiah($pecah['total']); ?></td>
                     </tbody>
                 </table>

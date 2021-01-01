@@ -24,6 +24,12 @@ function rupiah($angka)
     return $hasil_rupiah;
 }
 
+function stok($stokdes)
+{
+    $hasildes = number_format($stokdes, 3, ',', ',');
+    return $hasildes;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,16 +56,70 @@ function rupiah($angka)
         <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar-->
         <ul class="navbar-nav ml-auto ml-md-10">
+            <?php
+            $qrminbk = mysqli_query($db, "SELECT COUNT(kd_bk) AS minbk FROM bahan_baku WHERE stok < 3");
+            $ouputmin = mysqli_fetch_assoc($qrminbk);
+
+            if ($ouputmin['minbk'] != 0) {
+            ?>
+                <li class="nav-item">
+                    <a class="btn btn-danger" class="nav-link" href="#" data-toggle="modal" data-target="#statusbkmin" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa fa-bell"></i><span class="label label-warning"><strong> Ada <?= $ouputmin['minbk']; ?> Bahan Baku Yang Sudah Mau Habis</strong></span>
+                    </a>
+                </li>
+            <?php } ?>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">Ganti Password</a>
-                    <div class="dropdown-divider"></div>
+                    <!-- <a class="dropdown-item" href="#">Ganti Password</a> -->
+                    <!-- <div class="dropdown-divider"></div> -->
                     <a class="dropdown-item" href="admin.php?aksi=logout">Logout</a>
                 </div>
             </li>
+            <!-- Notifications: style can be found in dropdown.less -->
         </ul>
     </nav>
+    <div class="modal" tabindex="-1" id="statusbkmin">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Data Bahan Baku Yang Harus Dibeli</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <th>Bahan Baku</th>
+                            <th>Stok</th>
+                        </thead>
+                        <?php
+                        $qrdatabk = mysqli_query($db, "SELECT bahan_baku.kd_bk,bahan_baku.nm_bk,bahan_baku.stok,bahan_baku.satuan FROM bahan_baku WHERE stok <3");
+                        $hitungbk = mysqli_num_rows($qrdatabk);
+                        if ($hitungbk > 0) {
+                            while ($pecahbk = mysqli_fetch_assoc($qrdatabk)) {
+                        ?>
+                                <tbody>
+
+                                    <td><?= $pecahbk['nm_bk']; ?></td>
+                                    <td><?php
+                                        if ($pecahbk['stok'] < 1) {
+                                            echo "Habis";
+                                        } else {
+                                            echo $pecahbk['stok'] . " " . $pecahbk['satuan'];
+                                        } ?></td>
+
+                                </tbody>
+                        <?php }
+                        } ?>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="layoutSidenav">
         <?php include 'sidebar/template.php'; ?>
         <div id="layoutSidenav_content">
@@ -132,6 +192,28 @@ function rupiah($angka)
                         include 'modules/lapcatering/ceklap.php';
                     } elseif ($_GET['page'] == 'datplg') {
                         include 'modules/pelanggan/view.php';
+                    } elseif ($_GET['page'] == 'datongkir') {
+                        include 'modules/ongkir_wilayah/view.php';
+                    } elseif ($_GET['page'] == 'tamongkir') {
+                        include 'modules/ongkir_wilayah/tambah.php';
+                    } elseif ($_GET['page'] == 'editongkir') {
+                        include 'modules/ongkir_wilayah/edit.php';
+                    } elseif ($_GET['page'] == 'resep') {
+                        include 'modules/resep/view.php';
+                    } elseif ($_GET['page'] == 'tamresep') {
+                        include 'modules/resep/tambah.php';
+                    } elseif ($_GET['page'] == 'detresep') {
+                        include 'modules/resep/detail.php';
+                    } elseif ($_GET['page'] == 'paketcat') {
+                        include 'modules/menucat/view.php';
+                    } elseif ($_GET['page'] == 'tampaketcat') {
+                        include 'modules/menucat/tambah.php';
+                    } elseif ($_GET['page'] == 'detpaketcat') {
+                        include 'modules/menucat/detail.php';
+                    } elseif ($_GET['page'] == 'editpaketcat') {
+                        include 'modules/menucat/edit.php';
+                    } elseif ($_GET['page'] == 'ceklapuntung') {
+                        include 'modules/lapuntung/ceklap.php';
                     }
                 } else {
                     include 'modules/home/view.php';
@@ -183,74 +265,23 @@ function rupiah($angka)
                 }
             });
         });
-    });
-</script>
 
-<!-- pengambilan bahan -->
-
-<script type="text/javascript">
-    //view data
-
-    function loaddata() {
-        var datahandler = $("#data");
-        var kd_pengambilan = $("[name='kd_pengambilan']").val();
-        datahandler.html("");
-        $.ajax({
-            type: "POST",
-            data: "kd_pengambilan=" + kd_pengambilan,
-            url: 'http://localhost/chickenhitz/modules/pengambilan/viewbk.php',
-            success: function(result) {
-                var resultobj = JSON.parse(result);
-                var nomor = 1;
-
-
-                $.each(resultobj, function(key, val) {
-                    var newrow = $("<tr>");
-                    newrow.html("<td>" + nomor + "</td><td>" + val.nm_bk + "</td><td>" + val.jumlah + "</td><td><input type='button' onclick='hapusdata(" + val.kd_detpengambilan + ")' class='btn btn-danger' value='hapus'></td>");
-
-                    datahandler.append(newrow);
-                    nomor++;
-                });
-            }
-        });
-    }
-
-    // insert data
-    // loaddata();
-
-    function insertdata() {
-        var kd_pengambilan = $("[name='kd_pengambilan']").val();
-        var bk = $("[name='bk']").val();
-        var jumlah = $("[name='jumlah']").val();
-
-        $.ajax({
-            type: "POST",
-            data: "kd_pengambilan=" + kd_pengambilan + "&bk=" + bk + "&jumlah=" + jumlah,
-            url: 'http://localhost/chickenhitz/modules/pengambilan/insert.php',
-            success: function(result) {
-                var resultobj = JSON.parse(result);
-                $("#coment").html(resultobj.message);
-                $("[name='bk']").val("");
-                $("[name='jumlah']").val("");
-                loaddata();
-            }
-        });
-    }
-
-    //Hapus
-    function hapusdata(kd_detpengambilan) {
-        var tanya = confirm("Apakah Anda Yakin Akan Mengghapus Bahan Baku Ini?");
-        if (tanya) {
+        $("#bahanbk").change(function() {
+            var bahanbk = $("#bahanbk").val();
             $.ajax({
-                type: "POST",
-                data: "kd_detpengambilan=" + kd_detpengambilan,
-                url: "http://localhost/chickenhitz/modules/pengambilan/hapus.php",
-                success: function(result) {
-                    loaddata();
+                type: 'POST',
+                url: "http://localhost/chickenhitz/modules/pengadaan/vsatuan.php",
+                data: {
+                    bahanbk: bahanbk
+                },
+                cache: false,
+                success: function(result1) {
+                    var resultobj1 = JSON.parse(result1);
+                    $("#satuanbk").val(resultobj1.satuan);
                 }
             });
-        }
-    }
+        });
+    });
 </script>
 
 <!-- lihat resi -->
@@ -304,4 +335,74 @@ function rupiah($angka)
         $("#statuscatering").find("input[name=id_scattt]").val(idscatering);
         $("#statuscatering").find("select[name=keterangancat]").val(statuscatt);
     });
+</script>
+
+<!-- resep menu -->
+<script type="text/javascript">
+    //view data
+
+    function loaddata() {
+        var datahandler = $("#data");
+        var kd_resep = $("[name='kd_resep']").val();
+        datahandler.html("");
+        $.ajax({
+            type: "POST",
+            data: "kd_resep=" + kd_resep,
+            url: 'http://localhost/chickenhitz/modules/resep/viewresep.php',
+            success: function(result) {
+                var resultobj = JSON.parse(result);
+                var nomor = 1;
+
+
+                $.each(resultobj, function(key, val) {
+                    var newrow = $("<tr>");
+                    newrow.html("<td>" + nomor + "</td><td>" + val.nm_bk + "</td><td>" + val.takaran + "</td><td>" + val.satuan + "</td><td><input type='button' onclick='hapusdata(" + val.tmpkd_detresep + ")' class='btn btn-danger' value='hapus'></td>");
+
+                    datahandler.append(newrow);
+                    nomor++;
+                });
+            }
+        });
+    }
+
+    // insert data
+
+    loaddata();
+
+    function insertresep() {
+        var kd_resep = $("[name='kd_resep']").val();
+        var menu = $("[name='menu']").val();
+        var bk = $("[name='bk']").val();
+        var takaran = $("[name='takaran']").val();
+        var satuan = $("[name='satuan']").val();
+
+        $.ajax({
+            type: "POST",
+            data: "kd_resep=" + kd_resep + "&menu=" + menu + "&bk=" + bk + "&takaran=" + takaran + "&satuan=" + satuan,
+            url: "http://localhost/chickenhitz/modules/resep/insert.php",
+            success: function(result) {
+                var resultobj = JSON.parse(result);
+                $("#coment").html(resultobj.message);
+                $("[name='bk']").val("");
+                $("[name='takaran']").val("");
+                $("[name='satuan']").val("");
+                loaddata();
+            }
+        });
+    }
+
+    //Hapus
+    function hapusdata(tmpkd_detresep) {
+        var tanya = confirm("Apakah Anda Yakin Akan Menghapus Bahan Baku Ini?");
+        if (tanya) {
+            $.ajax({
+                type: "POST",
+                data: "tmpkd_detresep=" + tmpkd_detresep,
+                url: "http://localhost/chickenhitz/modules/resep/hapus.php",
+                success: function(result) {
+                    loaddata();
+                }
+            });
+        }
+    }
 </script>

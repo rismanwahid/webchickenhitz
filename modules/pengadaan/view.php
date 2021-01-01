@@ -47,7 +47,7 @@ if (isset($_GET['aksi'])) {
                                     <td style="width: 200px;"><?= $pecah['kd_pengadaan']; ?></td>
                                     <td style="width: 200px;"><?= date('d-m-Y', strtotime($pecah['tgl_pengadaan'])); ?></td>
                                     <td style="width:200px"><?= $pecah['nm_bk']; ?></td>
-                                    <td style="width:100px"><?= $pecah['jumlah']; ?></td>
+                                    <td style="width:100px"><?= $pecah['jumlah'] . " " . $pecah['satuan']; ?></td>
                                     <td style="width:150px"><?= rupiah($pecah['total']); ?></td>
                                     <td style="width:150px">
                                         <a class="btn btn-success btn-sm " href="admin.php?page=detpengadaan&kd_pengadaan=<?php echo $pecah['kd_pengadaan']; ?>">Detail</a>

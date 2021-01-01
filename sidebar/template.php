@@ -33,15 +33,27 @@
                         <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                         Data Menu
                     </a>
+                    <a href="admin.php?page=paketcat" class="nav-link collapsed">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Data Paket Catering
+                    </a>
+                    <a href="admin.php?page=resep" class="nav-link collapsed">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Data Resep
+                    </a>
+                    <a href="admin.php?page=datongkir" class="nav-link collapsed">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Data Tarif Pengiriman
+                    </a>
                     <div class="sb-sidenav-menu-heading">Transaksi</div>
                     <a href="admin.php?page=pengadaan" class="nav-link collapsed">
                         <div class="sb-nav-link-icon"><i class="fa  fa-shopping-cart"></i></div>
                         Pengadaan Bahan
                     </a>
-                    <a href="admin.php?page=pengambilan" class="nav-link collapsed">
+                    <!-- <a href="admin.php?page=pengambilan" class="nav-link collapsed">
                         <div class="sb-nav-link-icon"><i class="fa  fa-shopping-cart"></i></div>
                         Pengambilan Bahan
-                    </a>
+                    </a> -->
                     <a href="admin.php?page=penjualan" class="nav-link collapsed">
                         <div class="sb-nav-link-icon"><i class="fa  fa-shopping-cart"></i></div>
                         Penjualan
@@ -60,10 +72,10 @@
                         <div class="sb-nav-link-icon"><i class="fa  fa-file-pdf"></i></div>
                         Laporan Pengadaan Bahan
                     </a>
-                    <a href="admin.php?page=ceklapambil" class="nav-link collapsed">
+                    <!-- <a href="admin.php?page=ceklapambil" class="nav-link collapsed">
                         <div class="sb-nav-link-icon"><i class="fa  fa-file-pdf"></i></div>
                         Laporan Pengambilan Bahan
-                    </a>
+                    </a> -->
                     <a href="admin.php?page=ceklapjual" class="nav-link collapsed">
                         <div class="sb-nav-link-icon"><i class="fa  fa-file-pdf"></i></div>
                         Laporan Penjualan
@@ -71,6 +83,10 @@
                     <a href="admin.php?page=ceklapcat" class="nav-link collapsed">
                         <div class="sb-nav-link-icon"><i class="fa  fa-file-pdf"></i></div>
                         Laporan Catering
+                    </a>
+                    <a href="admin.php?page=ceklapuntung" class="nav-link collapsed">
+                        <div class="sb-nav-link-icon"><i class="fa  fa-file-pdf"></i></div>
+                        Laporan Keuntungan
                     </a><?php } ?>
             </div>
         </div>

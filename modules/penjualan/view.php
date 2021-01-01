@@ -138,16 +138,128 @@ if (isset($_GET['aksi'])) {
 </div>
 
 <?php
+
+function ambilData($query)
+{
+    global $db;
+    $data = [];
+    $d = mysqli_query($db, $query);
+    while ($temp = mysqli_fetch_assoc($d)) {
+        $data[] = $temp;
+    }
+
+    return $data;
+}
+
+
 if (isset($_POST['simpan'])) {
     $id_statusjual  = $_POST['id_statusjual'];
     $keterangan  = $_POST['keterangan'];
     $tgl_kirim = date('Y-m-d H:i:s');
 
+
+
     if ($keterangan == 'Dikirim') {
         mysqli_query($db, "UPDATE penjualan SET tgl_kirim='$tgl_kirim', status='$keterangan'  WHERE kd_penjualan='$id_statusjual'");
+    } elseif ($keterangan == 'Pembuatan Menu') {
+
+        $dataPesanan = ambilData("SELECT resep.kd_resep,det_penjualan.jumlah FROM det_penjualan INNER JOIN resep USING(kd_menu) WHERE det_penjualan.kd_penjualan = '{$id_statusjual}'");
+        $temp = [];
+
+        foreach ($dataPesanan as $d) {
+            $query = "SELECT kd_bk, takaran * {$d['jumlah']} AS jumlahtakaran,menu.nama_menu,det_resep.satuan FROM det_resep INNER JOIN resep USING(kd_resep) INNER JOIN menu USING(kd_menu) WHERE det_resep.kd_resep = '{$d['kd_resep']}'";
+
+            $bahan = ambilData($query);
+            $temp[] = $bahan;
+        }
+
+        $totalBahan = [];
+        foreach ($temp as $s) {
+            foreach ($s as $key => $val) {
+
+                if (array_key_exists($val['kd_bk'], $totalBahan)) {
+                    if ($val['satuan'] == "Potong") {
+                        echo "potong";
+                        $totalBahan[$val['nama_menu']][$val['kd_bk']] = $val['jumlahtakaran'] + $totalBahan[$val['nama_menu']][$val['kd_bk']];
+                    } else {
+                        $totalBahan[$val['nama_menu']][$val['kd_bk']] = ($val['jumlahtakaran'] / 1000) + $totalBahan[$val['nama_menu']][$val['kd_bk']];
+                    }
+                } else {
+                    if ($val['satuan'] == "Potong") {
+                        $totalBahan[$val['nama_menu']][$val['kd_bk']] = (int) $val['jumlahtakaran'];
+                    } else {
+                        $totalBahan[$val['nama_menu']][$val['kd_bk']] = $val['jumlahtakaran'] / 1000;
+                    }
+                }
+            }
+        }
+
+
+
+        $daftarBahanKurang = [];
+        foreach ($totalBahan as $key => $val) {
+
+            foreach ($val as $kd_bk => $jumlah) {
+                // cek kedatabase jika barang kurang maka tampilkan alert
+                $stokBahanBaku = ambilData("SELECT stok,nm_bk FROM bahan_baku WHERE kd_bk = '{$kd_bk}'")[0];
+                if ($stokBahanBaku['stok'] < $jumlah) {
+                    // var_dump($jumlah);
+                    // $kurang = $stokBahanBaku['stok'] - $jumlah;
+
+                    $daftarBahanKurang[$key][] = $stokBahanBaku['nm_bk'];
+                }
+            }
+        }
+
+
+
+
+        if (count($daftarBahanKurang)) {
+            $alert = "Bahan Baku Untuk Pembuatan Menu Tidak Cukup 
+daftar : ";
+
+
+            // daftar :
+            // Ayam Goreng
+            // - Tepung
+            // - Ayam
+            // Boba
+            // -Tepung
+            foreach ($daftarBahanKurang as $key => $val) {
+                $alert .= "
+{$key}";
+                foreach ($val as $d) {
+                    $alert .= "
+- {$d}";
+                }
+            }
+
+            echo '<script>
+            alert(`' . $alert . '`);
+            documen.location.href = "admin.php?page=catering"
+            </script>';
+        } else {
+
+            foreach ($temp as $t) {
+                foreach ($t as $k) {
+                    // merubah gram menjadi kilogram
+                    if ($k['satuan'] == "Potong") {
+                        $kg = $k['jumlahtakaran'];
+                    } else {
+
+                        $kg = $k['jumlahtakaran'] / 1000;
+                    }
+                    $query = "UPDATE bahan_baku SET stok = stok - {$kg} WHERE kd_bk = '{$k['kd_bk']}'";
+                    mysqli_query($db, $query);
+                    mysqli_query($db, "UPDATE penjualan SET status='$keterangan' WHERE kd_penjualan='$id_statusjual'");
+                }
+            }
+        }
     } else {
         mysqli_query($db, "UPDATE penjualan SET status='$keterangan' WHERE kd_penjualan='$id_statusjual'");
     }
+
+
 
     echo "<script>alert('Status:" . $keterangan . " ')</script>";
     echo "<script>window.location='admin.php?page=penjualan'</script>";

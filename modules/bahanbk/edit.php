@@ -56,8 +56,12 @@ if (isset($_POST['simpan'])) {
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>Satuan</label>
+                    <input type="text" class="form-control" name="stok" value="<?php echo $pecah['satuan']; ?>" readonly>
+                </div>
+                <div class="form-group">
                     <label>Stok</label>
-                    <input type="number" class="form-control" name="stok" value="<?php echo $pecah['stok']; ?>">
+                    <input type="number" class="form-control" name="stok" value="<?php echo $pecah['stok']; ?>" readonly>
                 </div>
 
             </div>
