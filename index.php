@@ -26,6 +26,26 @@ function rupiah($angka)
     return $hasil_rupiah;
 }
 
+function tanggal_indo($tanggal)
+{
+    $bulan = array(
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    );
+    $split = explode('-', $tanggal);
+    return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -379,7 +399,7 @@ function rupiah($angka)
     <!-- Countdown JS -->
     <script src="asetcs/eshop/js/finalcountdown.min.js"></script>
     <!-- Nice Select JS -->
-    <script src="asetcs/eshop/js/nicesellect.js"></script>
+    <!-- <script src="asetcs/eshop/js/nicesellect.js"></script> -->
     <!-- Flex Slider JS -->
     <script src="asetcs/eshop/js/flex-slider.js"></script>
     <!-- ScrollUp JS -->

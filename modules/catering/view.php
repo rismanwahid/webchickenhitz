@@ -49,7 +49,7 @@ if (isset($_GET['aksi'])) {
                                     <td style="width:200px"><?= $pecah['nm_plg']; ?></td>
                                     <td style="width:100px"><?= rupiah($pecah['total']); ?></td>
                                     <td style="width:200px"><?= $pecah['status_bayar']; ?><br>
-                                        <?php if ($pecah['status_bayar'] != 'Belum Melakukan Transfer') {
+                                        <?php if ($pecah['status_bayar'] != 'Belum Melakukan Transfer' & $pecah['status_bayar'] != 'Lunas') {
                                             echo "<button data-toggle='modal' id='aksigambar' data-target='#gambarresi' data-gambar='$pecah[gambar_resi]' class='btn btn-primary btn-sm' ><i class='fa fa-eye'></i></button>&ensp;";
                                             echo "<button data-toggle='modal' id='statusbayarcat' data-target='#bayarcat' data-idcat='$pecah[kd_penjualan]' data-statuscat='$pecah[status_bayar]' class='btn btn-primary btn-sm'><i class='fa fa-edit'></i></button>";
                                         } else {
@@ -57,7 +57,7 @@ if (isset($_GET['aksi'])) {
                                         } ?>
                                     </td>
                                     <td style="width:200px"><?= $pecah['status']; ?><br>
-                                        <?php if ($pecah['status'] != 'Dibatalkan') { ?>
+                                        <?php if ($pecah['status'] != 'Dibatalkan' & $pecah['status_bayar'] != 'Belum Melakukan Transfer' & $pecah['status'] != 'Telah Dikirim' & $pecah['status'] != 'Telah Diambil') { ?>
                                             <button data-toggle="modal" id="ubahscat" data-target="#statuscatering" data-idscatering="<?= $pecah['kd_penjualan']; ?>" data-statuscatt="<?= $pecah['status']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></button><?php } ?>
                                     </td>
 
@@ -301,7 +301,6 @@ daftar : ";
         }
     } else {
         mysqli_query($db, "UPDATE penjualan SET status='$keterangancat' WHERE kd_penjualan='$id_scattt'");
-
         echo "<script>alert('Status Pemesanan:" . $keterangancat . " ')</script>";
         echo "<script>window.location='admin.php?page=catering'</script>";
     }

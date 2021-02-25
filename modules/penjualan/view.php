@@ -45,7 +45,12 @@ if (isset($_GET['aksi'])) {
                         ?>
                                 <tr>
                                     <td><?= $no++; ?></td>
-                                    <td style="width: 150px;"><?= date('d-m-Y H:i', strtotime($pecah['tgl_jual'])); ?></td>
+                                    <td style="width: 150px;">
+                                        <?php
+                                        // $tanggal = date('Y-m-d', strtotime($pecah['tgl_jual']));
+                                        ?>
+                                        <?= date('d-m-Y H:i', strtotime($pecah['tgl_jual'])); ?>
+                                    </td>
                                     <td style="width:200px"><?= $pecah['nm_plg']; ?></td>
                                     <td style="width:100px"><?= rupiah($pecah['total']); ?></td>
                                     <td style="width:200px"><?= $pecah['status_bayar']; ?><br>
@@ -56,7 +61,7 @@ if (isset($_GET['aksi'])) {
                                         } ?>
                                     </td>
                                     <td style="width:200px"><?= $pecah['status']; ?><br>
-                                        <?php if ($pecah['status'] != 'Dibatalkan') { ?>
+                                        <?php if ($pecah['status'] != 'Dibatalkan' & $pecah['status_bayar'] != 'Belum Melakukan Transfer' & $pecah['status'] != 'Dikirim') { ?>
                                             <button data-toggle="modal" id="ubahsjual" data-target="#statusjual" data-idstatus="<?= $pecah['kd_penjualan']; ?>" data-statusjual="<?= $pecah['status']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></button><?php } ?>
                                     </td>
 
@@ -258,9 +263,6 @@ daftar : ";
     } else {
         mysqli_query($db, "UPDATE penjualan SET status='$keterangan' WHERE kd_penjualan='$id_statusjual'");
     }
-
-
-
     echo "<script>alert('Status:" . $keterangan . " ')</script>";
     echo "<script>window.location='admin.php?page=penjualan'</script>";
 }

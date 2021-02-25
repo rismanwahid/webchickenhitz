@@ -43,7 +43,15 @@
                     </a>
                     <a href="admin.php?page=datongkir" class="nav-link collapsed">
                         <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                        Data Tarif Pengiriman
+                        Data Kabupaten
+                    </a>
+                    <a href="admin.php?page=kecamatan" class="nav-link collapsed">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Data Kecamatan
+                    </a>
+                    <a href="admin.php?page=kelurahan" class="nav-link collapsed">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        Data Kelurahan
                     </a>
                     <div class="sb-sidenav-menu-heading">Transaksi</div>
                     <a href="admin.php?page=pengadaan" class="nav-link collapsed">

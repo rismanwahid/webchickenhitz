@@ -30,6 +30,26 @@ function stok($stokdes)
     return $hasildes;
 }
 
+function tanggal_indo($tanggal)
+{
+    $bulan = array(
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    );
+    $split = explode('-', $tanggal);
+    return $split[2] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[0];
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -214,6 +234,18 @@ function stok($stokdes)
                         include 'modules/menucat/edit.php';
                     } elseif ($_GET['page'] == 'ceklapuntung') {
                         include 'modules/lapuntung/ceklap.php';
+                    } elseif ($_GET['page'] == 'kecamatan') {
+                        include 'modules/kecamatan/view.php';
+                    } elseif ($_GET['page'] == 'tamkecamatan') {
+                        include 'modules/kecamatan/tambah.php';
+                    } elseif ($_GET['page'] == 'editkecamatan') {
+                        include 'modules/kecamatan/edit.php';
+                    } elseif ($_GET['page'] == 'kelurahan') {
+                        include 'modules/kelurahan/view.php';
+                    } elseif ($_GET['page'] == 'tamkelurahan') {
+                        include 'modules/kelurahan/tambah.php';
+                    } elseif ($_GET['page'] == 'editkelurahan') {
+                        include 'modules/kelurahan/edit.php';
                     }
                 } else {
                     include 'modules/home/view.php';

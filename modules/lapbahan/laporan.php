@@ -27,7 +27,6 @@ $query  = mysqli_query($db, "SELECT bahan_baku.*,suplier.nm_suply FROM bahan_bak
 $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(0, 5, 'Laporan Ketersediaan Bahan Baku', '0', '1', 'C', false);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(0, 5, 'Periode :' . " " . date('d-m-Y'), '0', '1', 'C', false);
 $pdf->Ln(5);
 $pdf->Cell(25, 6, '', 0, 0, 'C');
 $pdf->SetFont('Arial', '', 10);
@@ -61,4 +60,14 @@ foreach ($query as $item) {
     $pdf->Cell(25, 6, '', 0, 0, 'C');
 }
 
+$pdf->Ln(30);
+
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(90, 6, '', 0, 0, 'C');
+$pdf->Cell(0, 5, 'Periode :' . " " . date('d-m-Y'), '0', '1', 'C', false);
+$pdf->Cell(90, 6, '', 0, 0, 'C');
+$pdf->Cell(0, 5, "Dicetak Oleh, " . $_SESSION['level'], '0', '1', 'C', false);
+$pdf->Ln(15);
+$pdf->Cell(90, 6, '', 0, 0, 'C');
+$pdf->Cell(0, 5, $_SESSION['nama'], '0', '1', 'C', false);
 $pdf->Output("Laporan Bahan Baku.pdf", "I");

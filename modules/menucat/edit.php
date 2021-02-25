@@ -3,7 +3,7 @@ if (isset($_POST['simpan'])) {
     $kd_paketcat  = $_POST['kd_paketcat'];
     $nm_paketcat   = $_POST['nm_paketcat'];
     $status = $_POST['status'];
-    $harga = $_POST['harga'];
+    // $harga = $_POST['harga'];
 
     if ($_FILES["gambar"]["name"] == "") {
         $update_gambar  = "";
@@ -82,10 +82,6 @@ if (isset($_POST['simpan'])) {
                     <label>Gambar</label>
                     <img src="img/paketcat/<?php echo $pecah['gambar']; ?> " width="100px"><br><br>
                     <input type="file" name="gambar" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>Harga</label>
-                    <input type="number" name="harga" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="idkaryawan">Status</label><br>

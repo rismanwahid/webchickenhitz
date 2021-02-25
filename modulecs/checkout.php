@@ -9,6 +9,8 @@ if (isset($_POST['order'])) {
     $_SESSION['ss_total'] = $_POST['total'];
     $ongkir = $_POST['ongkir'];
     $tarifkirim = $_POST['tarifkirim'];
+    $kdkecamatan = $_POST['kecamatan'];
+    $kdkelurahan = $_POST['kelurahan'];
 
     if ($tarifkirim == "") {
         echo "<script>alert('Silahkan Pilih Kabupaten Pengantaran!')</script>";
@@ -17,8 +19,8 @@ if (isset($_POST['order'])) {
     }
 
     if ($t_bayar == 'Transfer') {
-        mysqli_query($db, "INSERT INTO penjualan(kd_penjualan,tgl_jual,id_pelanggan,tipe_jual,tipe_ambil,kd_tarif,tarif,alamat_kirim,status) VALUES 
-    ('$kd_jual','$tgl_jual','$id_plg','Biasa','Dikirim','$ongkir','$tarifkirim','$alamat','Sedang Dikonfirmasi')");
+        mysqli_query($db, "INSERT INTO penjualan(kd_penjualan,tgl_jual,id_pelanggan,tipe_jual,tipe_ambil,kd_tarif,kd_kecamatan,kd_kelurahan,tarif,alamat_kirim,status) VALUES 
+    ('$kd_jual','$tgl_jual','$id_plg','Biasa','Dikirim','$ongkir','$kdkecamatan','$kdkelurahan','$tarifkirim','$alamat','Sedang Dikonfirmasi')");
 
         mysqli_query($db, "INSERT INTO pembayaran(kd_penjualan,tipe_bayar,status_bayar) VALUES ('$kd_jual','$t_bayar','Belum Melakukan Transfer')");
 
@@ -28,8 +30,8 @@ if (isset($_POST['order'])) {
         echo "<script>window.location='index.php?page=bayar'</script>";
     } else {
 
-        mysqli_query($db, "INSERT INTO penjualan(kd_penjualan,tgl_jual,id_pelanggan,tipe_jual,tipe_ambil,kd_tarif,tarif,alamat_kirim,status) VALUES 
-        ('$kd_jual','$tgl_jual','$id_plg','Biasa','Dikirim','$ongkir','$tarifkirim','$alamat','Sedang Dikonfirmasi')");
+        mysqli_query($db, "INSERT INTO penjualan(kd_penjualan,tgl_jual,id_pelanggan,tipe_jual,tipe_ambil,kd_tarif,kd_kecamatan,kd_kelurahan,tarif,alamat_kirim,status) VALUES 
+        ('$kd_jual','$tgl_jual','$id_plg','Biasa','Dikirim','$ongkir','$kdkecamatan','$kdkelurahan','$tarifkirim','$alamat','Sedang Dikonfirmasi')");
 
         mysqli_query($db, "INSERT INTO pembayaran(kd_penjualan,tipe_bayar,status_bayar,gambar_resi) VALUES ('$kd_jual','$t_bayar','Bayar Ditempat','-')");
 
@@ -61,8 +63,11 @@ if (isset($_POST['order_catering'])) {
     $pengambilan = $_POST['pengambilan'];
     $ongkir = $_POST['ongkir'];
     $tarifkirim = $_POST['tarifkirim'];
+    $kdkecamatan = $_POST['kecamatan'];
+    $kdkelurahan = $_POST['kelurahan'];
     $_SESSION['ss_total'] = $_POST['total'];
     $_SESSION['ss_totalnon'] = $_POST['totalnon'];
+
 
     $awal   = date_create($tgl_jual);
     $akhir   = date_create($tgl_kirim);
@@ -78,8 +83,8 @@ if (isset($_POST['order_catering'])) {
 
 
     if ($pengambilan == 'Di Toko') {
-        mysqli_query($db, "INSERT INTO penjualan(kd_penjualan,tgl_jual,tgl_kirim,id_pelanggan,tipe_jual,tipe_ambil,kd_tarif,tarif,alamat_kirim,status) VALUES 
-    ('$kd_jual','$tgl_jual','$tgl_kirim','$id_plg','Catering','$pengambilan','-','-','-','Sedang Dikonfirmasi')");
+        mysqli_query($db, "INSERT INTO penjualan(kd_penjualan,tgl_jual,tgl_kirim,id_pelanggan,tipe_jual,tipe_ambil,kd_tarif,kd_kecamatan,kd_kelurahan,tarif,alamat_kirim,status) VALUES 
+    ('$kd_jual','$tgl_jual','$tgl_kirim','$id_plg','Catering','$pengambilan','-','-','','','-','Sedang Dikonfirmasi')");
 
         mysqli_query($db, "INSERT INTO pembayaran(kd_penjualan,tipe_bayar,status_bayar) VALUES ('$kd_jual','Transfer','Belum Melakukan Transfer')");
 
@@ -95,8 +100,8 @@ if (isset($_POST['order_catering'])) {
             return false;
         }
 
-        mysqli_query($db, "INSERT INTO penjualan(kd_penjualan,tgl_jual,tgl_kirim,id_pelanggan,tipe_jual,tipe_ambil,kd_tarif,tarif,alamat_kirim,status) VALUES 
-        ('$kd_jual','$tgl_jual','$tgl_kirim','$id_plg','Catering','$pengambilan','$ongkir','$tarifkirim','$alamat','Sedang Dikonfirmasi')");
+        mysqli_query($db, "INSERT INTO penjualan(kd_penjualan,tgl_jual,tgl_kirim,id_pelanggan,tipe_jual,tipe_ambil,kd_tarif,kd_kecamatan,kd_kelurahan,tarif,alamat_kirim,status) VALUES 
+        ('$kd_jual','$tgl_jual','$tgl_kirim','$id_plg','Catering','$pengambilan','$ongkir','$kdkecamatan','$kdkelurahan','$tarifkirim','$alamat','Sedang Dikonfirmasi')");
 
         mysqli_query($db, "INSERT INTO pembayaran(kd_penjualan,tipe_bayar,status_bayar) VALUES ('$kd_jual','Transfer','Belum Melakukan Transfer')");
 
@@ -181,8 +186,8 @@ if (isset($_POST['order_catering'])) {
                             </div>
                             <div class="form-group" id="kabupatenkirim" style="display: none;">
                                 <label>Kabupaten</label><br>
-                                <select id="selectongkir" name="ongkir" class="form-control">
-                                    <!-- <option value="">Pilih Kabupaten</option> -->
+                                <select name="ongkir" id="selectongkir" class="form-control">
+                                    <option value="" disabled selected>--Pilih Kabupaten--</option>
                                     <?php
                                     $qr2 = mysqli_query($db, "SELECT * FROM kabupaten");
                                     $hitung2 = mysqli_num_rows($qr2);
@@ -192,6 +197,18 @@ if (isset($_POST['order_catering'])) {
                                             <option value="<?php echo $pecah2['kd_tarif']; ?>"><?php echo $pecah2['nm_kabupaten']; ?></option>
                                     <?php }
                                     } ?>
+                                </select>
+                            </div>
+                            <div class="form-group" id="formkecamatan" style="display: none;">
+                                <label>Kecamatan</label>
+                                <select id="kecamatan" name="kecamatan" class="form-control">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="formkelurahan" style="display: none;">
+                                <label>Kelurahan</label>
+                                <select id="kelurahan" name="kelurahan" class="form-control">
+                                    <option value=""></option>
                                 </select>
                             </div>
                             <div class="form-group" id="alamat_kirim" style="display: none;">
@@ -232,8 +249,8 @@ if (isset($_POST['order_catering'])) {
                             </div>
                             <div class="form-group">
                                 <label>Kabupaten</label><br>
-                                <select id="selectongkir" name="ongkir" class="form-control">
-                                    <!-- <option value="">Pilih Kabupaten</option> -->
+                                <select name="ongkir" id="selectongkir" class="form-control">
+                                    <option value="" disabled selected>--Pilih Kabupaten--</option>
                                     <?php
                                     $qr2 = mysqli_query($db, "SELECT * FROM kabupaten");
                                     $hitung2 = mysqli_num_rows($qr2);
@@ -245,8 +262,20 @@ if (isset($_POST['order_catering'])) {
                                     } ?>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label>Alamat Pengiriman</label>
+                            <div class="form-group" id="formkecamatan" style="display: none;">
+                                <label>Kecamatan</label>
+                                <select id="kecamatan" name="kecamatan" class="form-control">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="formkelurahan" style="display: none;">
+                                <label>Kelurahan</label>
+                                <select id="kelurahan" name="kelurahan" class="form-control">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class=" form-group">
+                                <label>Alamat Lengkap Pengiriman</label>
                                 <textarea name="alamat" cols="30" rows="5"></textarea>
                             </div>
                             <div class="form-group">
@@ -347,6 +376,41 @@ if (isset($_POST['order_catering'])) {
                     $('#totalbayar1').val(ongkir);
                     $('#tarifon1').html(tariff);
                     $('#ongkirrr').html(ongkir);
+                }
+            });
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#selectongkir").change(function() {
+            var kabupaten = $("#selectongkir").val();
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost/chickenhitz/modulecs/v_kecamatan.php",
+                data: {
+                    selectongkir: kabupaten
+                },
+                cache: false,
+                success: function(msg) {
+                    $("#formkecamatan").show();
+                    $("#kecamatan").html(msg);
+                }
+            });
+        });
+        $("#kecamatan").change(function() {
+            var kecamatan = $("#kecamatan").val();
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost/chickenhitz/modulecs/v_kelurahan.php",
+                data: {
+                    kecamatan: kecamatan
+                },
+                cache: false,
+                success: function(msg) {
+                    $("#formkelurahan").show();
+                    $("#kelurahan").html(msg);
                 }
             });
         });

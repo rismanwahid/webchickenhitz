@@ -150,7 +150,9 @@ if (isset($_GET['aksi'])) {
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
-            </div><?php } else { ?>
+            </div><?php }
+            //OWNER
+             else { ?>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-success text-white mb-4">
                     <div class="card-body">

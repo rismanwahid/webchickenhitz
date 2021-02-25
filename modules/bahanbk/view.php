@@ -41,14 +41,20 @@ if (isset($_GET['aksi'])) {
                         if ($hitung > 0) {
                             while ($pecah = mysqli_fetch_assoc($query)) {
                         ?>
-                                <tr>
+                                <tr>                                    
                                     <td style="width: 200px;"><?= $pecah['nm_bk']; ?></td>
                                     <td style="width: 200px;"><?= $pecah['kd_suply']; ?></td>
                                     <td style="width:150px">
                                         <?php
                                         if ($pecah['stok'] < 1) {
                                             echo "Habis";
-                                        } else {
+                                        } elseif($pecah['satuan']=='Kg') {
+                                            echo stok($pecah['stok'])
+                                                . " " . "Gram";
+                                        }elseif ($pecah['satuan']=='Liter') {
+                                            echo stok($pecah['stok'])
+                                                . " " . "ml";
+                                        }else{
                                             echo $pecah['stok']
                                                 . " " . $pecah['satuan'];
                                         }

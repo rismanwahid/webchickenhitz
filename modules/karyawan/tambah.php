@@ -57,7 +57,9 @@ if (isset($_POST['simpan'])) {
                 </div>
                 <div class="form-group">
                     <label>Nama Lengkap</label>
-                    <input type="text" class="form-control" name="nama_karyawan">
+                    <?php
+                    echo "<input type='text' name='nama_karyawan' class='form-control' size='120' onkeypress='return event.charCode < 48 || event.charCode  >57'>";
+                    ?>
                 </div>
                 <div class="form-group">
                     <label for="idkaryawan">Jenis Kelamin</label><br>

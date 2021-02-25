@@ -7,8 +7,9 @@ if (isset($_GET['aksi'])) {
         mysqli_query($db, "DELETE FROM users WHERE id_users = '$id_plg'");
 
         echo "<script>alert('Data Berhasil Dihapus')</script>";
-        echo "<script>window.location='index.php?page=datplg'</script>";
+        echo "<script>window.location='admin.php?page=datplg'</script>";
     }
+
 }
 
 ?>

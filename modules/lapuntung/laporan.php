@@ -27,13 +27,13 @@ $tglmax = $_SESSION['maxtgl'];
 $queryjual  = mysqli_query($db, "SELECT penjualan.tgl_jual,pelanggan.nm_plg,SUM(det_penjualan.jumlah*menu.harga)+penjualan.tarif AS totalbiasa 
 FROM penjualan JOIN det_penjualan ON det_penjualan.kd_penjualan=penjualan.kd_penjualan 
 JOIN menu ON det_penjualan.kd_menu=menu.kd_menu 
-JOIN pelanggan ON penjualan.id_pelanggan=pelanggan.id_pelanggan AND penjualan.tipe_jual='Biasa' 
-WHERE DATE(penjualan.tgl_jual) BETWEEN '$tglmin' AND '$tglmax' GROUP BY penjualan.kd_penjualan");
+JOIN pelanggan ON penjualan.id_pelanggan=pelanggan.id_pelanggan AND penjualan.tipe_jual='Biasa' AND penjualan.status='Dikirim'
+WHERE DATE(penjualan.tgl_jual) BETWEEN '$tglmin' AND '$tglmax'  GROUP BY penjualan.kd_penjualan");
 
 $qrcatering  = mysqli_query($db, "SELECT penjualan.tgl_jual,pelanggan.nm_plg,SUM(det_penjualan.jumlah*menu.harga)+penjualan.tarif AS totalcat 
 FROM penjualan JOIN det_penjualan ON det_penjualan.kd_penjualan=penjualan.kd_penjualan 
 JOIN menu ON det_penjualan.kd_menu=menu.kd_menu 
-JOIN pelanggan ON penjualan.id_pelanggan=pelanggan.id_pelanggan AND penjualan.tipe_jual='Catering' 
+JOIN pelanggan ON penjualan.id_pelanggan=pelanggan.id_pelanggan JOIN pembayaran ON pembayaran.kd_penjualan=penjualan.kd_penjualan AND penjualan.tipe_jual='Catering' AND pembayaran.status_bayar='Lunas'
 WHERE DATE(penjualan.tgl_jual) BETWEEN '$tglmin' AND '$tglmax' GROUP BY penjualan.kd_penjualan");
 
 $qrpengadaan  = mysqli_query($db, "SELECT pengadaan.*,suplier.nm_suply,bahan_baku.nm_bk,SUM(pengadaan.jumlah*pengadaan.harga) AS sub FROM pengadaan JOIN suplier ON pengadaan.kd_suply=suplier.kd_suply JOIN bahan_baku ON pengadaan.kd_bk=bahan_baku.kd_bk WHERE tgl_pengadaan BETWEEN '$tglmin' AND '$tglmax' GROUP BY pengadaan.kd_pengadaan ORDER BY pengadaan.kd_pengadaan ASC");
@@ -42,9 +42,8 @@ $qrpengadaan  = mysqli_query($db, "SELECT pengadaan.*,suplier.nm_suply,bahan_bak
 
 
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 5, 'Laporan Pengambilan Bahan Baku', '0', '1', 'C', false);
+$pdf->Cell(0, 5, 'Laporan Keuntungan', '0', '1', 'C', false);
 
-$pdf->Cell(0, 5,  'Periode ' . date('d-m-Y', strtotime($tglmin)) . " S/d " . date('d-m-Y', strtotime($tglmax)), '0', '1', 'C', false);
 $pdf->Ln(5);
 $pdf->SetFont('Arial', 'B', 7);
 $pdf->Cell(40, 6, '', 0, 0, 'C');
@@ -166,5 +165,15 @@ $pdf->SetFont('Arial', 'B', 7);
 $pdf->Cell(40, 6, '', 0, 0, 'C');
 $pdf->Cell(68, 6, 'Total Keuntungan', 1, 0, 'C');
 $pdf->Cell(40, 6, rupiah($totaluntung), 1, 1, 'R');
+
+$pdf->Ln(20);
+$pdf->SetFont('Arial', '', 10);
+$pdf->Cell(90, 6, '', 0, 0, 'C');
+$pdf->Cell(0, 5, 'Periode ' . date('d-m-Y', strtotime($tglmin)) . " S/d " . date('d-m-Y', strtotime($tglmax)), '0', '1', 'C', false);
+$pdf->Cell(90, 6, '', 0, 0, 'C');
+$pdf->Cell(0, 5, "Dicetak Oleh, " . $_SESSION['level'], '0', '1', 'C', false);
+$pdf->Ln(15);
+$pdf->Cell(90, 6, '', 0, 0, 'C');
+$pdf->Cell(0, 5, $_SESSION['nama'], '0', '1', 'C', false);
 
 $pdf->Output("Laporan Keuntungan.pdf", "I");
